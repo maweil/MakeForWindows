@@ -10,21 +10,21 @@ jobs:
     container: registry.fedoraproject.org/fedora:37
     steps:
       - name: Install Dependencies
-        run: dnf install -y mingw64-gcc zip make wget tar
+        run: dnf install -y -q mingw64-gcc make wget tar
         
       - uses: actions/checkout@v3
 
       - name: Download make release tar.gz file
-        run: wget "https://ftpmirror.gnu.org/make/make-$(cat build_version.txt).tar.gz"
+        run: wget "https://ftpmirror.gnu.org/make/$(cat build_version.sha256sum | cut -d ' ' -f3)"
         
-      - name: Print out hash of tar.gz file
-        run: sha256sum "make-$(cat build_version.txt).tar.gz"
+      - name: Verify the hash of the tar.gz file
+        run: sha256sum -c build_version.sha256sum
 
       - name: Run the build process
         run: ./cross_build_w64.sh
         
       - name: Hash the built binaries
-        run: sha256sum make-$(cat build_version.txt)/dist/*
+        run: sha256sum make-*/dist/*
       
       - uses: actions/upload-artifact@v3
         with:

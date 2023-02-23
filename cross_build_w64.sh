@@ -8,39 +8,51 @@ copy_dependent_dlls(){
   do
     echo "Searching $dll_name" in $dll_source_dir
     find "$dll_source_dir" -name "$dll_name" -exec cp "{}" ./dist \;
-    if [[ $? -eq 0 ]]
+    dist_dll_path="./dist/$dll_name"
+    if [[ -f "$dist_dll_path" ]]
     then
-      dist_dll_path="./dist/$dll_name"
-      if [[ -f "$dist_dll_path" ]]
-      then
-        copy_dependent_dlls "$dist_dll_path"
-      fi
-    else
-      echo "WARNING: Could not find $dll_name"
+      copy_dependent_dlls "$dist_dll_path"
     fi
   done
 }
 
-make_version="$(cat build_version.txt)"
-host_triplet="x86_64-w64-mingw32"
-rm -rf "make-$make_version" || echo "No existing make directory"
 
-tar -xzvf "make-$make_version.tar.gz"
-cd "make-$make_version"
+
+# Verify tarball integrity first
+echo "##############################"
+echo "Verifying integrity of tarball"
+echo "##############################"
+sha256sum -c build_version.sha256sum
+
+tarball=$(cat build_version.sha256sum | cut -d " " -f3)
+make_version=${tarball%.tar.gz}
+host_triplet="x86_64-w64-mingw32"
+rm -rf "$make_version" || echo "No existing make directory"
+
+tar -xzf "$tarball"
+cd "$make_version"
 
 # Cleanup target directory
 rm -rf ./dist
 mkdir -p ./dist
 mkdir -p install_target
 
+echo "##########################################"
+echo "Building $make_version for $host_triplet"
+echo "##########################################"
 # By default, --export-dynamic is used which is not supported for PE binaries. 
 # Therefore override the LDFLAGS accordingly
 LDFLAGS='-Wl,--export-all-symbols -fstack-protector -lssp' mingw64-configure --without-guile
 mingw64-make && mv make.exe ./dist
 if [[ $? -eq 0 ]]
 then
-  copy_dependent_dlls ./dist/make.exe
-  zip -r "make-$make_version-w64.zip" dist/*
-  echo "Build complete. Result in ./dist"
-fi
+  echo "#######################################"
+  echo "Copying needed shared libraries to dist"
+  echo "#######################################"
 
+  copy_dependent_dlls ./dist/make.exe
+  
+  echo "################################"
+  echo "Build complete. Result in ./dist"
+  echo "################################"
+fi
