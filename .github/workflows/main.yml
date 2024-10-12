@@ -1,8 +1,9 @@
 name: Build make for Windows (x86_64)
 
 on:
+  workflow_dispatch:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "feat/deterministic-builds" ]
 
 jobs:
   build:
