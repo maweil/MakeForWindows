@@ -23,7 +23,7 @@ mkdir -p install_target
 echo "##########################################"
 echo "Building $make_version for $host_triplet"
 echo "##########################################"
-mingw64-configure --without-guile LDFLAGS='-Wl,--no-insert-timestamp' CFLAGS='-frandom-seed=123456789'
+mingw64-configure --without-guile LDFLAGS='-Wl,--no-insert-timestamp' CFLAGS='-frandom-seed=$@'
 mingw64-make && mv make.exe ./dist
 
 if [[ $? -eq 0 ]]
