@@ -8,10 +8,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container: registry.fedoraproject.org/fedora:40
+    container: registry.fedoraproject.org/fedora:41
     steps:
       - name: Install Dependencies
-        run: dnf install -y -q mingw64-gcc make wget tar
+        run: dnf install --setopt=install_weak_deps=False -y -q mingw64-gcc make wget tar
         
       - uses: actions/checkout@v4
 
