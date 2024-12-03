@@ -1,21 +1,12 @@
-# GNU Make for Windows (x86_64)
-This repository is meant to provide an easy way to cross-compile [GNU Make](https://www.gnu.org/software/make/) for Windows as trusted binaries of the most recent version were previously hard to find. 
+# GNU Make for Windows (x86_64) - **Inofficial**
+This repository is meant to provide an easy way to cross-compile [GNU Make](https://www.gnu.org/software/make/) for Windows as binaries of the most recent version were previously hard to find. 
 
-## Using the Binaries
-Head to the [Releases](https://github.com/maweil/MakeForWindows/releases) page to download `make.exe` together with any required `.dll` files as a `.zip`-file. Create a new directory, e.g. `C:\GNUMake` where you can later extract the archive to. Now unpack the downloaded archive to this directory using the Windows explorer (or another file compression utility of your choice).
+## Disclaimer
+**Note:** This Repo is not the official binary release of GNU Make. Please visit the [GNU Make Website](https://www.gnu.org/software/make/) if you're looking for any official sources or binaries of the GNU project.
+The goal of this repository is just to be able to build your own binaries to use Make on Windows. It was never endorsed or affiliated with the GNU Project or the Free Software Foundation.
+By now, there are other installation methods for Make on Windows that are probably a lot more widely used than this repository, e.g. via Chocolately.
 
-To make sure that you can invoke the `make` command from a shell, add the directory you created previously to your PATH environment variable first.
-You may have to restart your shell (or your system just to make sure) afterwards. You can then test whether `make` is installed properly by entering `make --version` into a shell.
-
-The output should look similar to this:
-```txt
-GNU Make 4.4
-Built for x86_64-w64-mingw32
-Copyright (C) 1988-2022 Free Software Foundation, Inc.
-License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>
-This is free software: you are free to change and redistribute it.
-There is NO WARRANTY, to the extent permitted by law.
-```
+As the focus of this repository was sharing a way how to build current releases of Make from source and I don't use Make as often anymore, I'll stop providing binaries for Make.
 
 ## Building Locally
 This part was tested on Fedora 37 only so far, so you may have to adapt the package names or install additional ones.
